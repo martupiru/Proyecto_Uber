@@ -1,6 +1,6 @@
 #PROYECTO LARICCHIA Y NAHMAN
 from dictionary import *
-
+import pickle
 #Hash Ubi Fijas
 H_Ubi_Fija= CreateHashTable(65)
 #Hash Personas
