@@ -1,6 +1,7 @@
 #PROYECTO LARICCHIA Y NAHMAN
 from dictionary import *
 import pickle
+
 #Hash Ubi Fijas
 H_Ubi_Fija= CreateHashTable(65)
 #Hash Personas
@@ -17,7 +18,6 @@ def load_fix_element(lugar): #lugar:<nombre,direccion>
     else:
         #si no se encuentra el nombre repertido se agrega a la hash
         search_nombre(H_Ubi_Fija,lugar)
-
 
 
 def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>

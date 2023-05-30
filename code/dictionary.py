@@ -17,8 +17,8 @@ def printHashTable(D):
         count+=1
         
 #haski
-def hash_mode(k,m):
-    return (k%m)
+#def hash_mode(k,m):
+#    return (k%m)
 
 def hash_subcadena(k,m):
     for i in range (len(k)):
@@ -26,7 +26,7 @@ def hash_subcadena(k,m):
     return(sum%m)
 
 
-def insert(D,key,value):
+"""def insert(D,key,value):
     if len(D)==0 or D==None:
         print("crear tabla hash con la funcion CreateHashTable")
         return None
@@ -39,22 +39,22 @@ def insert(D,key,value):
             D[index]=list
         else:
             tupla=(key,value)
-            D[index].append(tupla)
-
+            D[index].append(tupla)"""
+            
 def search(D,key):
-    index=hash_mode(key,len(D))
+    index=key
     for elemento in D[index]:
         if elemento[0]==key:
             return (elemento[1])
 
-def delete (D,key):
+"""def delete (D,key):
     if search(D,key)!=None:
         index=hash_mode(key,len(D))
         for i in range (len(D[index])):
             if D[index][i][0]==key:
                 #pop elimina el elemento
                 D[index].pop(i)
-                return D
+                return D"""
                 
 #######FUNCIONES ESPECIALES UBER#############
 def cargar_new_element_hash(D,key,elemento):
@@ -74,3 +74,9 @@ def search_nombre(D,elemento):
     else:
         cargar_new_element_hash(D,hash_new_name,elemento)
 
+def search_direccion(D,nombre): #Conocer, dado un lugar, persona o auto la dirección del mismo
+    hash_new_name=hash_subcadena(nombre,len(D))
+    index = hash_new_name
+    for elemento in D[index]:
+        if elemento[1][0]==nombre:
+            return (elemento[1][1])
