@@ -15,7 +15,7 @@ def load_fix_element(lugar): #lugar:<nombre,direccion>
     if lugar[0][0] not in ["H", "h", "A", "a", "T", "t", "S", "s", "E", "e", "K", "k", "I", "i"]:
         print("El nombre ingresado no es válido")
     else:
-        #si no se encuentra el nombre repertido se agrega a la hash
+        #si no se encuentra el nombre repetido se agrega a la hash
         search_nombre(H_Ubi_Fija,lugar)
 
 def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
@@ -29,11 +29,15 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
     else:
         print("El nombre ingresado no es válido")
 
-
-
-
-
-
-
-
+def create_trip(persona,elemento):
+    #chequeamos que la entrada elemento sea una direccion o un nombre de direcciones
+    if isinstance(elemento, str):
+        direccion = search_direccion(H_Ubi_Fija,elemento)
+    elif isinstance(elemento, tuple):
+        direccion = elemento
+        #validar que esa direccion exista
+    else:
+        print("El tipo de entrada no es válido")
+    
+    #if direccion != None:
 
