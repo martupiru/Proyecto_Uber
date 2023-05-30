@@ -71,8 +71,10 @@ def search_nombre(D,elemento):
     hash_new_name=hash_subcadena(elemento[0],len(D))
     if search(D,hash_new_name)!= None:
         print("Ya existe un elemento con ese nombre")
+        return None
     else:
-        cargar_new_element_hash(D,hash_new_name,elemento)
+        return hash_new_name
+        
 
 def search_direccion(D,nombre): #Conocer, dado un lugar, persona o auto la dirección del mismo
     hash_new_name=hash_subcadena(nombre,len(D))
