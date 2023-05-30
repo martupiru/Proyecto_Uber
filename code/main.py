@@ -7,7 +7,7 @@ from uber import *
 #printHashTable(H_Ubi_Fija)
 ubimovil=("P2","direccion", 125)
 ubimovil2=("c1", "direcccion",268)
-ubimovil3=("p2","direee", 365)
+ubimovil3=("m2","direee", 365)
 load_movil_element(ubimovil)
 load_movil_element(ubimovil2)
 load_movil_element(ubimovil3)
