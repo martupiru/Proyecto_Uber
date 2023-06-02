@@ -20,10 +20,7 @@ def printHashTable(D):
 #def hash_mode(k,m):
 #    return (k%m)
 
-def hash_subcadena(k,m):
-    for i in range (len(k)):
-        sum = ord(k[i])*(10**i)
-    return(sum%m)
+
 
 
 """def insert(D,key,value):
@@ -57,6 +54,12 @@ def search(D,key):
                 return D"""
                 
 #######FUNCIONES ESPECIALES UBER#############
+#Hash Key 
+def hash_subcadena(k,m):
+    for i in range (len(k)):
+        sum = ord(k[i])*(10**i)
+    return(sum%m)
+
 def cargar_new_element_hash(D,key,elemento):
     if D[key]==None:
         list=[]
