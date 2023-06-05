@@ -60,6 +60,15 @@ def hash_subcadena(k,m):
         sum = ord(k[i])*(10**i)
     return(sum%m)
 
+def hash_terna(terna,m):
+    for i in range (len(terna[0])):
+        sum1=ord(terna[0][i])*(10**i)
+    for i in range (len(terna[1])):
+        sum2=ord(terna[1][i])*(10**i)
+
+    sum=sum1+sum2+terna[2]
+    return(sum%m)
+
 def cargar_new_element_hash(D,key,elemento):
     if D[key]==None:
         list=[]
