@@ -1,6 +1,22 @@
 #PROYECTO LARICCHIA Y NAHMAN
 from dictionary import *
 import pickle
+import re
+
+
+def serializar():
+    with open('MAPITAPRUEBA.txt', 'r') as archivo:
+        lineas = archivo.readlines()
+    #vertices
+    lista = [elem[0:] for elem in lineas[0][1:-1].split('{' ) if elem.startswith('e')]
+    lista[0] = [elem.replace('}', '') for elem in lista]   
+    vertices = lista[0][0].strip("[]'").split(',')
+    
+    ternas = re.findall(r'<(.*?),(.*?),(.*?)>', lineas[1])
+    aristas = [(elem[0], elem[1], int(elem[2])) for elem in ternas]
+
+
+
 
 #Hash Ubi Fijas
 H_Ubi_Fija= CreateHashTable(65)
