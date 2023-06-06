@@ -32,6 +32,8 @@ with open("Hash_Personas.pk", "wb") as HashFilePersonas:
 H_Autos= CreateHashTable(65)
 with open("Hash_Autos.pk", "wb") as HashFileAutos:
     pickle.dump(H_Autos,HashFileAutos)
+#Hash DISTANCIAS
+
 
 
 def load_fix_element(lugar): #lugar:<nombre,direccion>
