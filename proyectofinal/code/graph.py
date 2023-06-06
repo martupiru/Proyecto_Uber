@@ -33,6 +33,28 @@ def dijkstra(graph, start):
                     distances[neighbor] = distance
 
     return distances
+def check_direccion(mapa,direccion):
+    #verificar que las esquinas existan en el mapa
+    flag = True
+    esquina1 = direccion[0][0] 
+    esquina2 = direccion[1][0]
+    peso_a_buscar= int(direccion[0][1])+int(direccion[1][1])
+    try:
+        adyacentes = mapa[esquina1]
+    except:
+        flag = False
+    if flag == True:
+        try:
+            if adyacentes[esquina2] == peso_a_buscar:
+                flag = True
+            else:
+                flag = False
+        except: 
+            flag = False
+    return flag
+
+
+
 
 
 

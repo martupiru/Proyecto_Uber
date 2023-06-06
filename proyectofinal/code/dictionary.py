@@ -20,9 +20,6 @@ def printHashTable(D):
 #def hash_mode(k,m):
 #    return (k%m)
 
-
-
-
 """def insert(D,key,value):
     if len(D)==0 or D==None:
         print("crear tabla hash con la funcion CreateHashTable")
@@ -37,12 +34,6 @@ def printHashTable(D):
         else:
             tupla=(key,value)
             D[index].append(tupla)"""
-            
-def search(D,key):
-    index=key
-    for elemento in D[index]:
-        if elemento[0]==key:
-            return (elemento[1])
 
 """def delete (D,key):
     if search(D,key)!=None:
@@ -52,6 +43,12 @@ def search(D,key):
                 #pop elimina el elemento
                 D[index].pop(i)
                 return D"""
+            
+def search(D,key):
+    index=key
+    for elemento in D[index]:
+        if elemento[0]==key:
+            return (elemento[1])
                 
 #######FUNCIONES ESPECIALES UBER#############
 #Hash Key 

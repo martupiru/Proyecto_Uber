@@ -17,3 +17,4 @@ printHashTable(H_Autos)
 print("++++++++")
 print(search_direccion(H_Personas,"P2"))'''
 #print(hash_terna(ubimovil2,1000))
+serializar()
