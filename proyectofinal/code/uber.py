@@ -24,16 +24,31 @@ def serializar():
 H_Ubi_Fija= CreateHashTable(65)
 with open("Hash_Ubicaciones.pk", "wb") as HashFileUbicaciones:
     pickle.dump(H_Ubi_Fija,HashFileUbicaciones)
+
 #Hash Personas
 H_Personas= CreateHashTable(65)
 with open("Hash_Personas.pk", "wb") as HashFilePersonas:
     pickle.dump(H_Personas,HashFilePersonas)
+
 #Hash Autos
 H_Autos= CreateHashTable(65)
 with open("Hash_Autos.pk", "wb") as HashFileAutos:
     pickle.dump(H_Autos,HashFileAutos)
-#Hash DISTANCIAS
 
+
+def cargar_mapa_hashD():
+    #CUANDO LLAMEMOS A LA FUNCION LLENAR HASH DE DISTANCIAS:
+    with open("Mapa.pk", "rb") as MapaFile:
+        Maph=pickle.load(MapaFile)
+    #Creamos Hash
+    H_Distancias = CreateHashTable(389)
+    #Llenamos Hash
+    Hash_Distancias = llenar_hash_distancias(Maph,H_Distancias)
+    #Serializamos la Hash Anterior
+    with open("Hash_Distancias.pk", "wb") as HashFileDistancias:
+        pickle.dump(Hash_Distancias,HashFileDistancias)
+    print("AAAAAAAAAAAAAA")
+    printHashTable(Hash_Distancias)
 
 
 def load_fix_element(lugar): #lugar:<nombre,direccion>

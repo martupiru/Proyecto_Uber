@@ -18,3 +18,6 @@ print("++++++++")
 print(search_direccion(H_Personas,"P2"))'''
 #print(hash_terna(ubimovil2,1000))
 serializar()
+cargar_mapa_hashD()
+print("POR FAA")
+

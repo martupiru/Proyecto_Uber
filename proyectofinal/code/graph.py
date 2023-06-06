@@ -1,6 +1,6 @@
 import heapq
-vertices = ['A', 'B', 'C', 'D', 'E']
-aristas = [('A', 'B', 5), ('A', 'C', 2), ('B', 'C', 1), ('B', 'D', 3), ('C', 'D', 2), ('D', 'E', 4)]
+from dictionary import *
+import pickle
 
 def cargar_grafo(vertices,aristas):
     graph = {node: [] for node in vertices}
@@ -10,21 +10,26 @@ def cargar_grafo(vertices,aristas):
 
 
 def check_direccion(mapa,direccion):
-    #verificar que las esquinas existan en el mapa
     flag = True
     esquina1 = direccion[0][0] 
     esquina2 = direccion[1][0]
     peso_a_buscar= int(direccion[0][1])+int(direccion[1][1])
     try:
+        #verificar que la esquina 1 existe en el mapa
         adyacentes = mapa[esquina1]
     except:
         flag = False
     if flag == True:
         try:
-            if adyacentes[esquina2] == peso_a_buscar:
-                flag = True
-            else:
-                flag = False
+            #verificar que la esquina 2 sea el otro vertice de esa arista
+            for i in range (len(adyacentes)):
+                if adyacentes[i][0] == esquina2:
+                    if adyacentes[i][1]==peso_a_buscar:
+                        flag = True    
+                    else:
+                        flag=False
+                else:
+                    flag = False
         except: 
             flag = False
     return flag
@@ -44,19 +49,31 @@ def dijkstra(graph, start):
                 heapq.heappush(queue, (distance, neighbor))
     return distances
 
-graph=cargar_grafo(vertices, aristas)
-start_node = 'B'
-distances = dijkstra(graph, start_node)
+
 # Imprimir las distancias más cortas desde el nodo de inicio
 #ITEMS ES LOS ELEMENTOS DEL DICCIONARIO QUE CORRESPONDEN A ESE NODO
+def llenar_hash_distancias(mapa,hash_distancias):
+    for vert in mapa:
+        distances = dijkstra(mapa, vert)
+        for node, distance in distances.items():
+            cadena = (f"({vert},{node},{distance})")
+            elementos = cadena.strip("()").split(",")
+            if (elementos[2] != "inf") and (elementos[2] != "0"):
+                terna = (elementos[0], elementos[1], int(elementos[2]))
+                hashkeyterna = hash_terna(terna,len(hash_distancias))
+                cargar_new_element_hash(hash_distancias,hashkeyterna,terna)
+    return hash_distancias
 
-for node, distance in distances.items():
-    cadena=(f"({start_node},{node},{distance})")
-    elementos = cadena.strip("()").split(",")
-    terna = (elementos[0], elementos[1], int(elementos[2]))
 
-
-start_node = 'e10'
-graph=cargar_grafo(vertices,aristas)
-distances = dijkstra(graph, start_node)
-print(distances)
+"""
+`def llenar_hash_distancias(mapa, hash_distancias):
+    for vert in mapa:
+        distances = dijkstra(mapa, vert)
+        for node, distance in distances.items():
+            cadena = (f"({vert},{node},{distance})")
+            elementos = cadena.strip("()").split(",")
+            if (elementos[2] != '0') and (elementos[2]!='inf'):
+                terna = (elementos[0], elementos[1], int(elementos[2]))
+                hashkeyterna = hash_terna(terna,len(hash_distancias))
+                cargar_new_element_hash(hash_distancias,hashkeyterna,terna)
+    printHashTable(hash_distancias)"""      

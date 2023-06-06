@@ -58,11 +58,10 @@ def hash_subcadena(k,m):
     return(sum%m)
 
 def hash_terna(terna,m):
-    for i in range (len(terna[0])):
-        sum1=ord(terna[0][i])*(10**i)
-    for i in range (len(terna[1])):
-        sum2=ord(terna[1][i])*(10**i)
-
+    for i in range (0,len(terna[0])):
+        sum1=ord(terna[0][i])*(10**i+1)
+    for i in range (0,len(terna[1])):
+        sum2=ord(terna[1][i])*(10**i+1)
     sum=sum1+sum2+terna[2]
     return(sum%m)
 
