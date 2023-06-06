@@ -14,7 +14,8 @@ def serializar():
     
     ternas = re.findall(r'<(.*?),(.*?),(.*?)>', lineas[1])
     aristas = [(elem[0], elem[1], int(elem[2])) for elem in ternas]
-
+    print(vertices)
+    print(aristas)
 
 
 

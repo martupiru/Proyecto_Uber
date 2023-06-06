@@ -16,4 +16,4 @@ print("--------------------j-----------")
 printHashTable(H_Autos)
 print("++++++++")
 print(search_direccion(H_Personas,"P2"))'''
-print(hash_terna(ubimovil,1000))
+#print(hash_terna(ubimovil2,1000))
