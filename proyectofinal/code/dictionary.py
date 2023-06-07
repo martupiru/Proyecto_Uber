@@ -62,8 +62,20 @@ def hash_terna(terna,m):
         sum1=ord(terna[0][i])*(10**i+1)
     for i in range (0,len(terna[1])):
         sum2=ord(terna[1][i])*(10**i+1)
-    sum=sum1+sum2+terna[2]
+    #
+    sum=sum1+sum2
+    #sum=sum1+sum2+terna[2]
     return(sum%m)
+
+def search_hash_distancias(hash_distancias,esquinas):#esquinas= dupla de esquinas ej. (e1,e8)
+   #calcular el hash a la dupla
+    hash_dupla=hash_terna(esquinas,len(hash_distancias))
+    index = hash_dupla
+    #elemento=[hash_key,(e1,e8,distancia)]
+    for elemento in hash_distancias[index]:
+        if elemento[1][0]==esquinas[0]:
+            if elemento[1][1]==esquinas[1]:
+                return elemento[1][2] #distancia del camino mas corto entre las dos esquinas
 
 def cargar_new_element_hash(D,key,elemento):
     if D[key]==None:
