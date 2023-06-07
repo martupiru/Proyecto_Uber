@@ -34,6 +34,12 @@ def check_direccion(mapa,direccion):
             flag = False
     return flag
 
+def check_persona_auto(hash,nombre):
+    hash_nombre=hash_subcadena(nombre,len(hash))
+    search_nombre(hash,nombre)
+
+
+
 def dijkstra(graph, start):
     distances = {node: float('inf') for node in graph}
     distances[start] = 0
@@ -65,15 +71,4 @@ def llenar_hash_distancias(mapa,hash_distancias):
     return hash_distancias
 
 
-"""
-`def llenar_hash_distancias(mapa, hash_distancias):
-    for vert in mapa:
-        distances = dijkstra(mapa, vert)
-        for node, distance in distances.items():
-            cadena = (f"({vert},{node},{distance})")
-            elementos = cadena.strip("()").split(",")
-            if (elementos[2] != '0') and (elementos[2]!='inf'):
-                terna = (elementos[0], elementos[1], int(elementos[2]))
-                hashkeyterna = hash_terna(terna,len(hash_distancias))
-                cargar_new_element_hash(hash_distancias,hashkeyterna,terna)
-    printHashTable(hash_distancias)"""      
+    

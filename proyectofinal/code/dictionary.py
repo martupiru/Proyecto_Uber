@@ -16,34 +16,7 @@ def printHashTable(D):
         print("----")
         count+=1
         
-#haski
-#def hash_mode(k,m):
-#    return (k%m)
 
-"""def insert(D,key,value):
-    if len(D)==0 or D==None:
-        print("crear tabla hash con la funcion CreateHashTable")
-        return None
-    else:
-        index=hash_mode(key,len(D))
-        if D[index]==None:
-            list=[]
-            tupla=(key,value)
-            list.append(tupla)
-            D[index]=list
-        else:
-            tupla=(key,value)
-            D[index].append(tupla)"""
-
-"""def delete (D,key):
-    if search(D,key)!=None:
-        index=hash_mode(key,len(D))
-        for i in range (len(D[index])):
-            if D[index][i][0]==key:
-                #pop elimina el elemento
-                D[index].pop(i)
-                return D"""
-            
 def search(D,key):
     index=key
     for elemento in D[index]:
@@ -87,10 +60,10 @@ def cargar_new_element_hash(D,key,elemento):
         tupla=(key,elemento)
         D[key].append(tupla)
 
-def search_nombre(D,elemento):
+def search_nombre(D,elemento): #elemento=(lugar,direccion)
     hash_new_name=hash_subcadena(elemento[0],len(D))
     if search(D,hash_new_name)!= None:
-        print("Ya existe un elemento con ese nombre")
+        #Ya existe un elemento con ese nombre"
         return None
     else:
         return hash_new_name
@@ -99,6 +72,9 @@ def search_nombre(D,elemento):
 def search_direccion(D,nombre): #Conocer, dado un lugar, persona o auto la dirección del mismo
     hash_new_name=hash_subcadena(nombre,len(D))
     index = hash_new_name
-    for elemento in D[index]:
-        if elemento[1][0]==nombre:
-            return (elemento[1][1])
+    try:
+        for elemento in D[index]:
+            if elemento[1][0]==nombre:
+                return (elemento[1][1])
+    except:
+        return None

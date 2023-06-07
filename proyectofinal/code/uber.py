@@ -90,6 +90,8 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
                 cargar_new_element_hash(HashAutos,new_name,ubimovil)
                 with open("Hash_Autos.pk", "wb") as HashFileAutos:
                     pickle.dump(HashAutos,HashFileAutos)
+            else:
+                print("Ya existe un elemento con ese nombre")
             
         elif ubimovil[0][0] == "P" or ubimovil[0][0] == "p":
             with open("Hash_Personas.pk", "rb") as HashFilePersonas:
@@ -100,18 +102,32 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
                 cargar_new_element_hash(HashPersonas,new_name,ubimovil)
                 with open("Hash_Personas.pk", "wb") as HashFilePersonas:
                     pickle.dump(HashPersonas,HashFilePersonas)
+            else:
+                print("Ya existe un elemento con ese nombre")
         else:
             print("El nombre ingresado no es válido")
 
-def create_trip(persona,elemento):
+def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
     #chequeamos que la entrada elemento sea una direccion o un nombre de direcciones
-    if isinstance(elemento, str):
-        direccion = search_direccion(H_Ubi_Fija,elemento)
-    elif isinstance(elemento, tuple):
-        direccion = elemento
-        #validar que esa direccion exista
+    with open("Hash_Personas.pk", "rb") as HashFilePersonas:
+        HashPersonas=pickle.load(HashFilePersonas)
+    if (search_nombre(HashPersonas,persona))==None:
+        if isinstance(elemento, str):
+            with open("Hash_Ubicaciones.pk", "rb") as HashFileUbicaciones:
+                HashUbi=pickle.load(HashFileUbicaciones)
+            direccion = search_direccion(HashUbi,elemento)
+        elif isinstance(elemento, tuple):
+            direccion = elemento
+            #validar que esa direccion exista
+            with open("Mapa.pk", "rb") as MapaFile:
+                Maph=pickle.load(MapaFile)
+            exist = check_direccion(Maph,direccion)
+            if exist == False:
+                print("Esa direccion no existe")
+        else:
+            print("El tipo de entrada no es válido")
     else:
-        print("El tipo de entrada no es válido")
+        print('No existe la persona con la que desea cargar el viaje')
     
-    #if direccion != None:
+  
 
