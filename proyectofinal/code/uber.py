@@ -52,15 +52,16 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
 
 
 
-def serializar():
+def serializar(path):
     #preguntar argumentos de la funcion con path
-    with open('MAPITAPRUEBA.txt', 'r') as archivo:
+    with open(path, 'r') as archivo:
         lineas = archivo.readlines()
     #vertices
     lista = [elem[0:] for elem in lineas[0][1:-1].split('{' ) if elem.startswith('e')]
     lista[0] = [elem.replace('}', '') for elem in lista]   
     vertices = lista[0][0].strip("[]'").split(',')
     #ver bien como funciona!!!!!
+    #aristas
     ternas = re.findall(r'<(.*?),(.*?),(.*?)>', lineas[1])
     aristas = [(elem[0], elem[1], int(elem[2])) for elem in ternas]
     graph = cargar_grafo(vertices, aristas)
