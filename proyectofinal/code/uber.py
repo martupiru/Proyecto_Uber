@@ -1,10 +1,12 @@
 #PROYECTO LARICCHIA Y NAHMAN
 from dictionary import *
 from graph import *
+from loud_elements import *
+from trip import *
 import pickle
 import re
-from loud_elements import *
-#-----------serializar_fichero--------------
+
+#---------------------------serializar fichero---------------------------------
 def serializar(path):
     #preguntar argumentos de la funcion con path
     with open(path, 'r') as archivo:
@@ -17,10 +19,12 @@ def serializar(path):
     #aristas
     ternas = re.findall(r'<(.*?),(.*?),(.*?)>', lineas[1])
     aristas = [(elem[0], elem[1], int(elem[2])) for elem in ternas]
+  
     graph = cargar_grafo(vertices, aristas)
     with open("Mapa.pk", "wb") as MapaFile:
         pickle.dump(graph,MapaFile)
-#----------------------------------------------------------------
+
+#--------------------------cargar hash distancias-----------------------------
 def cargar_mapa_hashD():
     #CUANDO LLAMEMOS A LA FUNCION LLENAR HASH DE DISTANCIAS:
     with open("Mapa.pk", "rb") as MapaFile:
@@ -33,7 +37,7 @@ def cargar_mapa_hashD():
     with open("Hash_Distancias.pk", "wb") as HashFileDistancias:
         pickle.dump(Hash_Distancias,HashFileDistancias)
 
-#---------------------------------------------------------------
+#------------------------- cargar ubicaciones fijas---------------------------
 def load_fix_element(lugar):
     HashUbi=load_hash_table_ubicaciones()
     # Realiza las modificaciones, cargar lugares 
@@ -72,144 +76,42 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
             
         else:
             print("El nombre ingresado no es válido")
+
 #-----------------------------------------------------------------------------------
-#---------------Create_trip-------------------------
+
 def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
     direccion_persona=validar_entradas_create_trip(persona,elemento)[0]
     direccion_destino=validar_entradas_create_trip(persona,elemento)[1]
+    # monto_persona=#search_monto_persona
     if direccion_destino !=None:
         hash_autos=load_hash_table_Autos()
         list_autos=load_lista_Autos()
         tupla_sentido_persona=verificar_sentido(direccion_persona)
-        search_auto_lista (hash_autos,list_autos,tupla_sentido_persona)
+        ranking=search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,direccion_persona)
+        if len(ranking)!=0:
+            print('Ranking autos: ',)
+            for node in ranking:
+                print('Auto: ', node[0], '\ndistancia: ', node[1], '\ncosto de viaje: ', node[2], '\n----------')
         
-
-
-def verificar_sentido(direccion):
-    cont=0
-    mapa=load_map()
-    esquina1=direccion[0][0]
-    esquina2=direccion[1][0]
-    if esquina1 in mapa:
-        for i in range(len(mapa[esquina1])):
-            if esquina2 in mapa[esquina1][i]:
-                #print(f"La arista entre {esquina1} y {esquina2} es dirigida de {esquina1} a {esquina2}")
-                cont+=1
-                arista=(esquina1,esquina2)
-    if esquina2 in mapa :
-        for i in range(len(mapa[esquina2])):
-            if esquina1 in mapa[esquina2][i]:
-                #print(f"La arista entre {esquina1} y {esquina2} es dirigida de {esquina2} a {esquina1}")
-                cont+=1
-                arista=(esquina2,esquina1)
-    if cont==1:
-        return((1,arista))
-    elif cont==2:
-        #print('doble sentido')
-        return((2,arista))
-
-
-def search_auto_lista (hash_autos,list_autos,tupla_sentido_persona): 
-    for i in range (len(list_autos)):
-        auto = list_autos [i]
-        #calculamos hash_key al auto
-        hash_key_auto = hash_subcadena(auto,len(hash_autos))
-        #obtenemos los datos del auto mediante el search
-        datos_Auto = search_hash_autos(hash_autos,auto,hash_key_auto) #devuelve una tupla con:(direccion,monto)
-        direccion_auto = datos_Auto[0]
-        monto_auto = datos_Auto[1]
-        
-        tupla_sentido_auto=verificar_sentido(direccion_auto)
-        
-        #!!!!!LLAMAR FUNCION DONDE EVALUAREMOS LOS CASOS
-        #RECIBIRA: (tupla_sentido_persona,tupla_sentido_auto)
-        
-        #retornara: camino mas corto con su monto
-        #se agrega a la lista
-def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto):
-    hash_distancias=load_hash_table_distancias()
-    if tupla_sentido_auto[0]==1 and tupla_sentido_persona[0]==1:
-        
-        esquinas=(tupla_sentido_auto[1][1],tupla_sentido_persona[1][0])#esquina por la q pasa el auto,esquina anterior a la persona
-        distancia=search_hash_distancias(hash_distancias,esquinas)
-        return distancia
-    elif tupla_sentido_auto[0]==1 and tupla_sentido_persona[0]==2:
-        #caso1
-        #return((2,arista))
-        esquinas1=(tupla_sentido_auto[1][1],tupla_sentido_persona[1][0])
-        esquinas2=(tupla_sentido_auto[1][1],tupla_sentido_persona[1][1])
-        distancia1=search_hash_distancias(hash_distancias,esquinas1)
-        distancia2=search_hash_distancias(hash_distancias,esquinas2)
-        if distancia1>distancia2:
-            return distancia2
-        elif distancia1<distancia2: return distancia1
+        #CAMINO MAS CORTO PARA LLEGAR A DESTINO
+            tupla_sentido_destino=verificar_sentido(direccion_destino)
+            distancia_destino=casos_recorridos(tupla_sentido_persona,tupla_sentido_destino,direccion_persona,direccion_destino)
+            print('La distancia a su destino es: ',distancia_destino)
+            realiza_viaje=input('Indique si va a relizar el viaje (Si/No)').lower()
+            if realiza_viaje=='si':
+                entrada_valida=False
+                while entrada_valida==False:
+                    auto_elegido= input('Elija un auto: ').lower
+                    for node in ranking:
+                        if auto_elegido==node[0].lower():
+                            entrada_valida=True
+                        else:
+                            print('Ingrese el auto correctamente')
+                #TELETRANSPORTAR
+                personas=load_hash_table_Personas()  
+                #UPDATE_DIRECCION HASH PERSONA (persona,nueva_direccion,costo) c
+                #UPDATE_DIRECCION HASH AUTO ()
+            elif realiza_viaje==('no'):
+                print('Viaje rechazado')
         else:
-            ff=0
-        #tener en cuenta q vamos a hacer cuando las distancias sean ==
-    elif tupla_sentido_auto[0]==2 and tupla_sentido_persona[0]==1:
-        esquinas1=(tupla_sentido_auto[1][0],tupla_sentido_persona[1][0])
-        esquinas2=(tupla_sentido_auto[1][1],tupla_sentido_persona[1][0])
-        distancia1=search_hash_distancias(hash_distancias,esquinas1)
-        distancia2=search_hash_distancias(hash_distancias,esquinas2)
-        if distancia1>distancia2:
-            return distancia2
-        elif distancia1<distancia2: return distancia1
-        else:
-            ff
-    elif tupla_sentido_auto[0]==2 and tupla_sentido_persona[0]==2:  
-        esquinas1=(tupla_sentido_auto[1][0],tupla_sentido_persona[1][0])
-        esquinas2=(tupla_sentido_auto[1][1],tupla_sentido_persona[1][0])
-        esquinas3=(tupla_sentido_auto[1][0],tupla_sentido_persona[1][1])
-        esquinas4=(tupla_sentido_auto[1][1],tupla_sentido_persona[1][1])
-        distancia1=search_hash_distancias(hash_distancias,esquinas1)
-        distancia2=search_hash_distancias(hash_distancias,esquinas2)
-        distancia3=search_hash_distancias(hash_distancias,esquinas3)
-        distancia4=search_hash_distancias(hash_distancias,esquinas4)
-        
-
-    #salmios del for
-    #recorremos y evaluamos el monto si no lo puede pagar se elimina de la lista
-    #ordenamos la lista por camino mas corto
-    #devolvemmos los tres primeros elementos de la lista
-    #panel interactivo (si o no viaje)
-
-#Dada una key buscamos los elementos
-def search_hash_autos(hash_autos,auto,key):
-    for elemento in hash_autos[key]: #slot de la hash:(hk,(nombre_auto,direccion,monto))
-        if elemento[1][0] == auto: #si coinciden hago lo siguiente
-            direc_auto = elemento[1][1]
-            monto_auto = elemento[1][2]
-            tuple = (direc_auto,monto_auto)
-            return(tuple)
-
-
-    
-def validar_entradas_create_trip(persona,elemento):
-    #chequeamos que la entrada elemento sea una direccion o un nombre de direcciones
-    HashPersonas=load_hash_table_Personas()
-    if (search_exist_nombre(HashPersonas,persona))==None: #si existe elemento devuelve none
-        direc_persona=search_direccion(HashPersonas,persona)
-        exist_person=True
-        if isinstance(elemento, str): #verifica que el elemento sea str
-            HashUbi=load_hash_table_ubicaciones()
-            direccion_destino = search_direccion(HashUbi,elemento)
-            exist_direccion=True
-        elif isinstance(elemento, tuple): #verifica que el elemento sea tupla
-            direccion_destino = elemento
-            #validar que esa direccion exista
-            with open("Mapa.pk", "rb") as MapaFile:
-                Maph=pickle.load(MapaFile)
-            exist_direccion = check_direccion(Maph,direccion_destino)
-            if exist_direccion == False:
-                print("Esa direccion no existe")
-        else:
-            print("El tipo de entrada no es válido")
-    else:
-        print('No existe la persona con la que desea cargar el viaje')
-        exist_person=False
-    if (exist_person==True) and (exist_direccion==True):
-        return ((direc_persona,direccion_destino))
-    else:
-        return None
-
-
+            print('No hay autos para su viaje')

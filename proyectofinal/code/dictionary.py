@@ -69,7 +69,6 @@ def search_exist_nombre(D,elemento): #elemento=(lugar,direccion)
     else:
         return hash_new_name
         
-
 def search_direccion(D,nombre): #Conocer, dado un lugar, persona o auto la dirección del mismo
     hash_new_name=hash_subcadena(nombre,len(D))
     index = hash_new_name
@@ -79,3 +78,12 @@ def search_direccion(D,nombre): #Conocer, dado un lugar, persona o auto la direc
                 return (elemento[1][1])
     except:
         return None
+
+#Dada una key buscamos los elementos
+def search_hash_autos(hash_autos,auto,key):
+    for elemento in hash_autos[key]: #slot de la hash:(hk,(nombre_auto,direccion,monto))
+        if elemento[1][0] == auto: #si coinciden hago lo siguiente
+            direc_auto = elemento[1][1]
+            monto_auto = elemento[1][2]
+            tuple = (direc_auto,monto_auto)
+            return(tuple)
