@@ -26,6 +26,7 @@ def check_direccion(mapa,direccion):
                 if adyacentes[i][0] == esquina2:
                     if adyacentes[i][1]==peso_a_buscar:
                         flag = True    
+                        return flag #que corte ahi  
                     else:
                         flag=False
                 else:
@@ -33,10 +34,6 @@ def check_direccion(mapa,direccion):
         except: 
             flag = False
     return flag
-
-def check_persona_auto(hash,nombre):
-    hash_nombre=hash_subcadena(nombre,len(hash))
-    search_nombre(hash,nombre)
 
 
 

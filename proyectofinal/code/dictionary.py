@@ -1,5 +1,3 @@
-#TP HASH TABLE NAHMAN MARTINA L:13685
-
 def CreateHashTable(Dim):
     Hash=[]
     #crea un Hash de M posciones
@@ -22,6 +20,7 @@ def search(D,key):
     for elemento in D[index]:
         if elemento[0]==key:
             return (elemento[1])
+        else: return None
                 
 #######FUNCIONES ESPECIALES UBER#############
 #Hash Key 
@@ -31,6 +30,8 @@ def hash_subcadena(k,m):
     return(sum%m)
 
 def hash_terna(terna,m):
+    sum1=0
+    sum2=0
     for i in range (0,len(terna[0])):
         sum1=ord(terna[0][i])*(10**i+1)
     for i in range (0,len(terna[1])):
@@ -60,8 +61,8 @@ def cargar_new_element_hash(D,key,elemento):
         tupla=(key,elemento)
         D[key].append(tupla)
 
-def search_nombre(D,elemento): #elemento=(lugar,direccion)
-    hash_new_name=hash_subcadena(elemento[0],len(D))
+def search_exist_nombre(D,elemento): #elemento=(lugar,direccion)
+    hash_new_name=hash_subcadena(elemento,len(D))
     if search(D,hash_new_name)!= None:
         #Ya existe un elemento con ese nombre"
         return None
