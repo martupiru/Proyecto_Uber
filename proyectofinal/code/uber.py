@@ -19,7 +19,7 @@ def serializar(path):
     #aristas
     ternas = re.findall(r'<(.*?),(.*?),(.*?)>', lineas[1])
     aristas = [(elem[0], elem[1], int(elem[2])) for elem in ternas]
-  
+
     graph = cargar_grafo(vertices, aristas)
     with open("Mapa.pk", "wb") as MapaFile:
         pickle.dump(graph,MapaFile)
@@ -82,7 +82,8 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
 def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
     direccion_persona=validar_entradas_create_trip(persona,elemento)[0]
     direccion_destino=validar_entradas_create_trip(persona,elemento)[1]
-    # monto_persona=#search_monto_persona
+    hash_personas =load_hash_table_Personas()
+    monto_persona=search_monto_personas(hash_personas,persona)
     if direccion_destino !=None:
         hash_autos=load_hash_table_Autos()
         list_autos=load_lista_Autos()
@@ -101,16 +102,19 @@ def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
             if realiza_viaje=='si':
                 entrada_valida=False
                 while entrada_valida==False:
-                    auto_elegido= input('Elija un auto: ').lower
+                    auto_elegido= input('Elija un auto: ').lower()
                     for node in ranking:
                         if auto_elegido==node[0].lower():
                             entrada_valida=True
+                            monto_total_viaje = node[2]
                         else:
                             print('Ingrese el auto correctamente')
-                #TELETRANSPORTAR
-                personas=load_hash_table_Personas()  
-                #UPDATE_DIRECCION HASH PERSONA (persona,nueva_direccion,costo) c
+                #TELETRANSPORTAR 
+                #UPDATE_DIRECCION HASH PERSONA (persona,nueva_direccion,costo) 
+                new_monto_persona = monto_persona - monto_total_viaje
+                update_hash_personas(hash_personas,persona,direccion_destino,new_monto_persona)
                 #UPDATE_DIRECCION HASH AUTO ()
+                update_hash_autos(hash_autos,auto_elegido,direccion_destino)
             elif realiza_viaje==('no'):
                 print('Viaje rechazado')
         else:

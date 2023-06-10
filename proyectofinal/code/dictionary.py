@@ -25,6 +25,7 @@ def search(D,key):
 #######FUNCIONES ESPECIALES UBER#############
 #Hash Key 
 def hash_subcadena(k,m):
+    k=k.lower()
     for i in range (len(k)):
         sum = ord(k[i])*(10**i)
     return(sum%m)
@@ -87,3 +88,29 @@ def search_hash_autos(hash_autos,auto,key):
             monto_auto = elemento[1][2]
             tuple = (direc_auto,monto_auto)
             return(tuple)
+
+#dada una persona retornar su monto
+def search_monto_personas(hash_personas,persona):
+    hash_name=hash_subcadena(persona,len(hash_personas))
+    for elemento in hash_personas[hash_name]:
+        if elemento [1][0] == persona:
+            return(elemento[1][2])
+        
+#dado un auto, actualizamos su la direccion en la que se encuentra
+def update_hash_autos(hash_autos,auto,new_direccion):
+    hash_key_auto = hash_subcadena(auto,len(hash_autos))
+    for elemento in hash_autos[hash_key_auto]:
+        if elemento[1][0] == auto:
+            #actualizamos la direccion
+            elemento[1][1] = new_direccion
+
+def update_hash_personas(hash_personas,persona,new_direccion,new_monto):
+    hash_key_persona = hash_subcadena(persona,len(hash_personas))
+    for elemento in hash_personas[hash_key_persona]:
+        if elemento[1][0] == persona:
+            #actualizamos la direccion
+            elemento[1][1] = new_direccion
+            #actualizamos el monto
+            elemento[1][2] = new_monto
+
+

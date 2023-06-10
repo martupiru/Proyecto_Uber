@@ -1,32 +1,65 @@
 from dictionary import *
-from graph import *
 from loud_elements import *
-
+from graph import *
 
 def verificar_sentido(direccion):
     cont=0
     mapa=load_map()
-    esquina1=direccion[0][0]
-    esquina2=direccion[1][0]
-    if esquina1 in mapa:
-        for i in range(len(mapa[esquina1])):
-            if esquina2 in mapa[esquina1][i]:
-                #print(f"La arista entre {esquina1} y {esquina2} es dirigida de {esquina1} a {esquina2}")
-                cont+=1
-                arista=(esquina1,esquina2)
-    if esquina2 in mapa :
-        for i in range(len(mapa[esquina2])):
-            if esquina1 in mapa[esquina2][i]:
-                #print(f"La arista entre {esquina1} y {esquina2} es dirigida de {esquina2} a {esquina1}")
-                cont+=1
-                arista=(esquina2,esquina1)
-    if cont==1:
-        return((1,arista))
-    elif cont==2:
-        #print('doble sentido')
-        return((2,arista))
+    try:
+        esquina1=direccion[0][0]
+        esquina2=direccion[1][0]
+        if esquina1 in mapa:
+            for i in range(len(mapa[esquina1])):
+                if esquina2 in mapa[esquina1][i]:
+                    #print(f"La arista entre {esquina1} y {esquina2} es dirigida de {esquina1} a {esquina2}")
+                    cont+=1
+                    arista=(esquina1,esquina2)
+        if esquina2 in mapa :
+            for i in range(len(mapa[esquina2])):
+                if esquina1 in mapa[esquina2][i]:
+                    #print(f"La arista entre {esquina1} y {esquina2} es dirigida de {esquina2} a {esquina1}")
+                    cont+=1
+                    arista=(esquina2,esquina1)
+        if cont==1:
+            return((1,arista))
+        elif cont==2:
+            #print('doble sentido')
+            return((2,arista))
+    except: 
+        print('Esa direccion no es valida')
 
+def check_direccion(mapa,direccion):#Hay que cambiarlo para la entrada pueda ser como dijo el profe xd
+    #chequear el sentido
+    tupla_sentido=verificar_sentido(direccion) #(1/2,arista con esquinas en sentido de la calle)
+    if tupla_sentido !=None:
+        esquina1 = tupla_sentido[1][0]
+        esquina2 = tupla_sentido[1][1]
+        flag = True
 
+        peso_a_buscar= int(direccion[0][1])+int(direccion[1][1])
+        try:
+            #verificar que la esquina 1 existe en el mapa
+            adyacentes = mapa[esquina1]
+        except:
+            flag = False
+        if flag == True:
+            try:
+                #verificar que la esquina 2 sea el otro vertice de esa arista
+                for i in range (len(adyacentes)):
+                    if adyacentes[i][0] == esquina2:
+                        if adyacentes[i][1]==peso_a_buscar:
+                            flag = True 
+                            return flag #que corte ahi  
+                        else:
+                            flag=False
+                    else:
+                        flag = False
+            except: 
+                flag = False
+        return flag
+    else:
+        print('Direccion incorrecta')
+        
 def search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,direccion_persona): 
     lista_ranking=[]
     for i in range (len(list_autos)):
@@ -38,7 +71,7 @@ def search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,
         direccion_auto = datos_Auto[0]
         monto_auto = datos_Auto[1]
         
-        tupla_sentido_auto=verificar_sentido(direccion_auto)
+        tupla_sentido_auto = verificar_sentido(direccion_auto)
         #!!!!!LLAMAR FUNCION DONDE EVALUAREMOS LOS CASOS
         #RECIBIRA: (tupla_sentido_persona,tupla_sentido_auto)
         distancia=casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,direccion_auto)

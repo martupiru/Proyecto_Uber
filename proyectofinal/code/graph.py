@@ -1,5 +1,7 @@
 import heapq
+from loud_elements import *
 from dictionary import *
+from trip import *
 import pickle
 
 def cargar_grafo(vertices,aristas):
@@ -7,34 +9,6 @@ def cargar_grafo(vertices,aristas):
     for source, target, weight in aristas:
         graph[source].append((target, weight))
     return graph
-
-
-def check_direccion(mapa,direccion):
-    flag = True
-    esquina1 = direccion[0][0] 
-    esquina2 = direccion[1][0]
-    peso_a_buscar= int(direccion[0][1])+int(direccion[1][1])
-    try:
-        #verificar que la esquina 1 existe en el mapa
-        adyacentes = mapa[esquina1]
-    except:
-        flag = False
-    if flag == True:
-        try:
-            #verificar que la esquina 2 sea el otro vertice de esa arista
-            for i in range (len(adyacentes)):
-                if adyacentes[i][0] == esquina2:
-                    if adyacentes[i][1]==peso_a_buscar:
-                        flag = True    
-                        return flag #que corte ahi  
-                    else:
-                        flag=False
-                else:
-                    flag = False
-        except: 
-            flag = False
-    return flag
-
 
 
 def dijkstra(graph, start):
