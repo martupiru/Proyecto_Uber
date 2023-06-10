@@ -69,11 +69,12 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
         if ubimovil[0][0] == "C" or ubimovil[0][0] == "c":
             H_Autos=load_hash_table_Autos()
             modify_hash_table_Autos(H_Autos,ubimovil)
+            save_hash_table_Autos(H_Autos)
         #------personas------
         elif ubimovil[0][0] == "P" or ubimovil[0][0] == "p":
             H_Personas=load_hash_table_Personas()
             modify_hash_table_Personas(H_Personas,ubimovil)
-            
+            save_hash_table_Personas(H_Personas)
         else:
             print("El nombre ingresado no es válido")
 

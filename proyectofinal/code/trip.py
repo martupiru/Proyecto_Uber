@@ -26,7 +26,7 @@ def verificar_sentido(direccion):
             #print('doble sentido')
             return((2,arista))
     except: 
-        print('Esa direccion no es valida')
+        return None
 
 def check_direccion(mapa,direccion):#Hay que cambiarlo para la entrada pueda ser como dijo el profe xd
     #chequear el sentido
@@ -57,8 +57,9 @@ def check_direccion(mapa,direccion):#Hay que cambiarlo para la entrada pueda ser
             except: 
                 flag = False
         return flag
-    else:
-        print('Direccion incorrecta')
+    else: 
+        print("Esa direccion no es válida")
+
         
 def search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,direccion_persona): 
     lista_ranking=[]
