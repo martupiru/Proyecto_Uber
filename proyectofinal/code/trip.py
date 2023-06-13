@@ -75,7 +75,7 @@ def search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,
         tupla_sentido_auto = verificar_sentido(direccion_auto)
         #!!!!!LLAMAR FUNCION DONDE EVALUAREMOS LOS CASOS
         #RECIBIRA: (tupla_sentido_persona,tupla_sentido_auto)
-        distancia=casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,direccion_auto)
+        distancia,camino=casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,direccion_auto)
         monto_total_viaje=distancia+(monto_auto/4)
         #si la persona no puede pagar el viaje no se agrega a la lista
         if monto_total_viaje<=monto_persona:
@@ -118,9 +118,9 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
         esquina_auto=tupla_auto[1]
         esquina_persona=tupla_persona[0]
         esquinas=(esquina_auto,esquina_persona)
+        distancia,camino=search_hash_distancias(hash_distancias,(esquina_auto,esquina_persona))
         distancia=distancia_total_recorrido(esquinas,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
-        print(distancia)
-        return distancia
+        return distancia,camino
     #-----------funciona--------------------------------
         
     #-------------CASO2-----------------------------
@@ -137,22 +137,21 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
             #solo hacemos el recorrido con esquina 1
             esquinas1=(esquina_auto,esquina_persona2)
             distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
-            return distancia1
+            return distancia1, camino2
         elif esquina_persona1 in camino2:
             #solo hacemos el recorrido con esquina 2
             esquinas2=(esquina_auto,esquina_persona1)
             distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
-            return distancia2
+            return distancia2,camino1
         else:
             esquinas1=(esquina_auto,esquina_persona1)
             distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
             esquinas2=(esquina_auto,esquina_persona2)
             distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
-            print(distancia1)
-            print(distancia2)
             if distancia1>distancia2:
-                return distancia2
-            else : return distancia1
+
+                return distancia2,camino2
+            else : return distancia1,camino1
     #-----------funciona--------------------------------
     #-------------CASO3-----------------------------
     elif tupla_sentido_auto[0]==2 and tupla_sentido_persona[0]==1:
@@ -168,29 +167,80 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
             #solo hacemos el recorrido con esquina 1
             esquinas1=(esquina_auto1,esquina_persona)
             distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
-            return distancia1
+            return distancia1,camino1
         elif esquina_auto2 in camino1:
             #solo hacemos el recorrido con esquina 2
             esquinas2=(esquina_auto2,esquina_persona)
             distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
-            return distancia2
+            return distancia2,camino2
         else:
             esquinas1=(esquina_auto1,esquina_persona)
             distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
             esquinas2=(esquina_auto2,esquina_persona)
             distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
-            print(distancia1)
-            print(distancia2)
             if distancia1>distancia2:
-                return distancia2
-            else : return distancia1
-    #-----------funciona--------------------------------
+                return distancia2,camino2
+            else : return distancia1,camino1
+    #-----------funciona----------------------------
     #-------------CASO4-----------------------------
-    #recorremos y evaluamos el monto si no lo puede pagar se elimina de la lista
-    #ordenamos la lista por camino mas corto
-    #devolvemmos los tres primeros elementos de la lista
-    #panel interactivo (si o no viaje)
-    
+    else:
+        #tupla_sentido_auto[0]==2 and tupla_sentido_persona[0]==2
+        #dos posibles nodos para el auto
+        esquina_auto1=tupla_sentido_auto[1][0]
+        esquina_auto2=tupla_sentido_auto[1][1]
+        #dos posibles nodos para la persona
+        esquina_persona1=tupla_sentido_persona[1][0]
+        esquina_persona2=tupla_sentido_persona[1][1]
+
+        distancia1,camino1=search_hash_distancias(hash_distancias,(esquina_auto1,esquina_persona1))
+        distancia2,camino2=search_hash_distancias(hash_distancias,(esquina_auto2,esquina_persona1))
+        distancia3,camino3=search_hash_distancias(hash_distancias,(esquina_auto1,esquina_persona2))
+        distancia4,camino4=search_hash_distancias(hash_distancias,(esquina_auto2,esquina_persona2))
+
+        if esquina_auto1 in camino2:
+            
+            esquinas1=(esquina_auto1,esquina_persona1)
+            distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)              
+            distancia2=None
+        elif esquina_auto2 in camino1:
+            
+            esquinas2=(esquina_auto2,esquina_persona1)
+            distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto) 
+            distancia1=None
+        else:
+            esquinas2=(esquina_auto2,esquina_persona1)
+            distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+            esquinas1=(esquina_auto1,esquina_persona1)
+            distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+        
+        if esquina_auto2 in camino3:
+            esquinas4=(esquina_auto2,esquina_persona2)
+            distancia4=distancia_total_recorrido(esquinas4,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)              
+            distancia3=None
+
+        elif esquina_auto1 in camino4:
+            esquinas3=(esquina_auto1,esquina_persona2)
+            distancia3=distancia_total_recorrido(esquinas3,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)              
+            distancia4=None
+        else:
+            esquinas4=(esquina_auto2,esquina_persona2)
+            distancia4=distancia_total_recorrido(esquinas4,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+            esquinas3=(esquina_auto1,esquina_persona2)
+            distancia3=distancia_total_recorrido(esquinas3,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+        distacias=[distancia1,distancia2,distancia3,distancia4]
+        distacias_validas = [elem for elem in distacias if elem is not None]
+        distacias_validas.sort()
+        if distancia1!=None and distacias_validas[0]==distancia1:
+            return distancia1,camino1
+        elif distancia2!=None and distacias_validas[0]==distancia2:
+            return distancia2,camino2
+        elif distancia3!=None and distacias_validas[0]==distancia3:
+            return distancia3,camino3
+        elif distancia4!=None and distacias_validas[0]==distancia4:
+            return distancia4,camino4
+
+    #-----------funciona??----------------------------
+
 def validar_entradas_create_trip(persona,elemento):
     #chequeamos que la entrada elemento sea una direccion o un nombre de direcciones
     HashPersonas=load_hash_table_Personas()

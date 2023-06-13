@@ -81,15 +81,20 @@ def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
 #-----------------------------------------------------------------------------------
 
 def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
+
     direccion_persona=validar_entradas_create_trip(persona,elemento)[0]
     direccion_destino=validar_entradas_create_trip(persona,elemento)[1]
+
     hash_personas =load_hash_table_Personas()
     monto_persona=search_monto_personas(hash_personas,persona)
-    if direccion_destino !=None:
+
+    if (direccion_destino !=None) and (direccion_persona!=None):
+
         hash_autos=load_hash_table_Autos()
         list_autos=load_lista_Autos()
         tupla_sentido_persona=verificar_sentido(direccion_persona)
         ranking=search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,direccion_persona)
+        
         if len(ranking)!=0:
             print('Ranking autos: ',)
             for node in ranking:
@@ -97,8 +102,10 @@ def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
         
         #CAMINO MAS CORTO PARA LLEGAR A DESTINO
             tupla_sentido_destino=verificar_sentido(direccion_destino)
-            distancia_destino=casos_recorridos(tupla_sentido_persona,tupla_sentido_destino,direccion_persona,direccion_destino)
+            distancia_destino,camino_destino=casos_recorridos(tupla_sentido_destino,tupla_sentido_persona,direccion_persona,direccion_destino)
+            #delvolver camino
             print('La distancia a su destino es: ',distancia_destino)
+            print('El camino a su destino es: ',camino_destino)
             realiza_viaje=input('Indique si va a relizar el viaje (Si/No)').lower()
             if realiza_viaje=='si':
                 entrada_valida=False
@@ -120,3 +127,4 @@ def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
                 print('Viaje rechazado')
         else:
             print('No hay autos para su viaje')
+    print('No es posible este viaje')
