@@ -46,11 +46,14 @@ def search_hash_distancias(hash_distancias,esquinas):#esquinas= dupla de esquina
    #calcular el hash a la dupla
     hash_dupla=hash_terna(esquinas,len(hash_distancias))
     index = hash_dupla
-    #elemento=[hash_key,(e1,e8,distancia)]
+    #elemento=[hash_key,((e1,e8,distancia),(lista_visitados))]
     for elemento in hash_distancias[index]:
-        if elemento[1][0]==esquinas[0]:
-            if elemento[1][1]==esquinas[1]:
-                return elemento[1][2] #distancia del camino mas corto entre las dos esquinas
+        dupla = elemento[1]
+        if dupla[0][0]==esquinas[0]:
+            if dupla[0][1]==esquinas[1]:
+                distancia = dupla[0][2] #distancia del camino mas corto entre las dos esquinas
+                lista_visitados = dupla[1] #lista de nodos por los que hay que pasar para llegar del nodo inicio al nodo fin
+                return distancia, lista_visitados
 
 def cargar_new_element_hash(D,key,elemento):
     if D[key]==None:

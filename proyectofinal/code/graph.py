@@ -10,11 +10,12 @@ def cargar_grafo(vertices,aristas):
         graph[source].append((target, weight))
     return graph
 
-
 def dijkstra(graph, start):
     distances = {node: float('inf') for node in graph}
     distances[start] = 0
     queue = [(0, start)]
+    previous = {node: None for node in graph}  # Diccionario para guardar los nodos anteriores
+    visited = {node: [] for node in graph}  # Diccionario para guardar la lista de nodos visitados para cada nodo
     while queue:
         curr_distance, curr_node = heapq.heappop(queue)
         if curr_distance > distances[curr_node]:
@@ -23,22 +24,23 @@ def dijkstra(graph, start):
             distance = curr_distance + weight
             if distance < distances[neighbor]:
                 distances[neighbor] = distance
+                previous[neighbor] = curr_node  # Guardar el nodo anterior
+                visited[neighbor] = visited[curr_node] + [curr_node]  # Actualizar la lista de nodos visitados para el vecino
                 heapq.heappush(queue, (distance, neighbor))
-    return distances
+ # Convertir el diccionario previous en una lista
+    return distances,  visited  # Retornar distancias, nodos anteriores y lista de visitados para cada nodo en formato de lista
 
-
-# Imprimir las distancias más cortas desde el nodo de inicio
-#ITEMS ES LOS ELEMENTOS DEL DICCIONARIO QUE CORRESPONDEN A ESE NODO
 def llenar_hash_distancias(mapa,hash_distancias):
     for vert in mapa:
-        distances = dijkstra(mapa, vert)
+        distances, visitados = dijkstra(mapa, vert)
         for node, distance in distances.items():
             cadena = (f"({vert},{node},{distance})")
             elementos = cadena.strip("()").split(",")
             if (elementos[2] != "inf") and (elementos[2] != "0"):
                 terna = (elementos[0], elementos[1], int(elementos[2]))
+                dupla=(terna,visitados[node])
                 hashkeyterna = hash_terna(terna,len(hash_distancias))
-                cargar_new_element_hash(hash_distancias,hashkeyterna,terna)
+                cargar_new_element_hash(hash_distancias,hashkeyterna,dupla)
     return hash_distancias
 
 
