@@ -112,30 +112,80 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
     #ambas calles son de un solo sentido
     tupla_persona=tupla_sentido_persona[1]
     tupla_auto=tupla_sentido_auto[1]
-    #-------------funciona-----------------------------
+
+    #-------------CASO1-----------------------------
     if tupla_sentido_auto[0]==1 and tupla_sentido_persona[0]==1:
         esquina_auto=tupla_auto[1]
         esquina_persona=tupla_persona[0]
         esquinas=(esquina_auto,esquina_persona)
         distancia=distancia_total_recorrido(esquinas,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+        print(distancia)
         return distancia
     #-----------funciona--------------------------------
-        #calle del auto un solo sentido y calle de la persona doble sentido
-        #hay que cambiarlo creo o nose
+        
+    #-------------CASO2-----------------------------
+    #calle del auto un solo sentido y calle de la persona doble sentido
     elif tupla_sentido_auto[0]==1 and tupla_sentido_persona[0]==2:
+        #nodos
         esquina_auto=tupla_sentido_auto[1][1]
         esquina_persona1=tupla_sentido_persona[1][0]
         esquina_persona2=tupla_sentido_persona[1][1]
-        esquinas1=(esquina_auto,esquina_persona1)
-        distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
-        esquinas2=(esquina_auto,esquina_persona2)
-        distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
-        print(distancia1)
-        print(distancia2)
-        if distancia1>distancia2:
-
+        #verificar que que los recorridos no contengan al otro nodo
+        distancia1,camino1=search_hash_distancias(hash_distancias,(esquina_auto,esquina_persona1))
+        distancia2,camino2=search_hash_distancias(hash_distancias,(esquina_auto,esquina_persona2))
+        if esquina_persona2 in camino1:
+            #solo hacemos el recorrido con esquina 1
+            esquinas1=(esquina_auto,esquina_persona2)
+            distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
+            return distancia1
+        elif esquina_persona1 in camino2:
+            #solo hacemos el recorrido con esquina 2
+            esquinas2=(esquina_auto,esquina_persona1)
+            distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
             return distancia2
-        else : return distancia1
+        else:
+            esquinas1=(esquina_auto,esquina_persona1)
+            distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+            esquinas2=(esquina_auto,esquina_persona2)
+            distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+            print(distancia1)
+            print(distancia2)
+            if distancia1>distancia2:
+                return distancia2
+            else : return distancia1
+    #-----------funciona--------------------------------
+    #-------------CASO3-----------------------------
+    elif tupla_sentido_auto[0]==2 and tupla_sentido_persona[0]==1:
+        #nodos
+        esquina_auto1=tupla_sentido_auto[1][0]
+        esquina_auto2=tupla_sentido_auto[1][1]
+        esquina_persona=tupla_sentido_persona[1][0]
+        
+        #verificar que que los recorridos no contengan al otro nodo
+        distancia1,camino1=search_hash_distancias(hash_distancias,(esquina_auto1,esquina_persona))
+        distancia2,camino2=search_hash_distancias(hash_distancias,(esquina_auto2,esquina_persona))
+        if esquina_auto1 in camino2:
+            #solo hacemos el recorrido con esquina 1
+            esquinas1=(esquina_auto1,esquina_persona)
+            distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
+            return distancia1
+        elif esquina_auto2 in camino1:
+            #solo hacemos el recorrido con esquina 2
+            esquinas2=(esquina_auto2,esquina_persona)
+            distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)            
+            return distancia2
+        else:
+            esquinas1=(esquina_auto1,esquina_persona)
+            distancia1=distancia_total_recorrido(esquinas1,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+            esquinas2=(esquina_auto2,esquina_persona)
+            distancia2=distancia_total_recorrido(esquinas2,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
+            print(distancia1)
+            print(distancia2)
+            if distancia1>distancia2:
+                return distancia2
+            else : return distancia1
+    #-----------funciona--------------------------------
+    #-------------CASO4-----------------------------
     #recorremos y evaluamos el monto si no lo puede pagar se elimina de la lista
     #ordenamos la lista por camino mas corto
     #devolvemmos los tres primeros elementos de la lista
