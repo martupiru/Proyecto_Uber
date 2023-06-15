@@ -1,5 +1,4 @@
 import heapq
-import pickle
 from dictionary import *
 
 def cargar_grafo(vertices,aristas):
@@ -26,7 +25,7 @@ def dijkstra(graph, start):
                 visited[neighbor] = visited[curr_node] + [curr_node]  # Actualizar la lista de nodos visitados para el vecino
                 heapq.heappush(queue, (distance, neighbor))
  # Convertir el diccionario previous en una lista
-    return distances,  visited  # Retornar distancias, nodos anteriores y lista de visitados para cada nodo en formato de lista
+    return distances,  visited  # Retornar distancias y lista de visitados para cada nodo en formato de lista
 
 def llenar_hash_distancias(mapa,hash_distancias):
     for vert in mapa:

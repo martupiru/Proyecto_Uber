@@ -23,7 +23,7 @@ def verificar_sentido(direccion):
         if cont==1:
             return((1,arista))
         elif cont==2:
-            #print('doble sentido')
+            #doble sentido
             return((2,arista))
     except: 
         return None
@@ -72,21 +72,18 @@ def search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,
         datos_Auto = search_hash_autos(hash_autos,auto,hash_key_auto) #devuelve una tupla con:(direccion,monto)
         direccion_auto = datos_Auto[0]
         monto_auto = datos_Auto[1]
-        
-        tupla_sentido_auto = verificar_sentido(direccion_auto)
-        #!!!!!LLAMAR FUNCION DONDE EVALUAREMOS LOS CASOS
-        #RECIBIRA: (tupla_sentido_persona,tupla_sentido_auto)
-        distancia,camino=casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,direccion_auto)
-        monto_total_viaje=distancia+(monto_auto/4)
-        #si la persona no puede pagar el viaje no se agrega a la lista
-        if monto_total_viaje<=monto_persona:
-            terna_ranking=(auto,distancia,monto_total_viaje)
-            lista_ranking.append(terna_ranking)
+        #si la persona no puede pagar el costo del auto, el auto no rankea
+        if monto_persona>monto_auto:
+            tupla_sentido_auto = verificar_sentido(direccion_auto)
+            distancia,camino=casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,direccion_auto)
+            monto_total_viaje=(distancia+monto_auto)/4
+            #si la persona no puede pagar el viaje no se agrega a la lista
+            if monto_total_viaje<=monto_persona:
+                terna_ranking=(auto,distancia,monto_total_viaje)
+                lista_ranking.append(terna_ranking)
     list_ranking_ordenada=sorted(lista_ranking,key=lambda terna: terna[1])
     ranking=list_ranking_ordenada[:3] #cortara la lista a los primero 3
     return ranking
-
-        #se agrega a la lista
 
 
 # #solo tenemos que acceder si es posible el recorrido
