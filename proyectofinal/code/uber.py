@@ -187,11 +187,41 @@ def create_trip(persona,elemento): #elemento= direccion o nombre direccion fija
 #CONSOLA
 
 
+def convertir_a_tupla(cadena):
+    tuplas = re.findall(r'<(.*?),(.*?)>', cadena)
+    tupla = tuple((terna[0], int(terna[1])) for terna in tuplas)
+    return tupla
 
-# if sys.argv[1] == "-create_trip":
-#     try:
-#         create_trip(sys.argv[2],sys.argv[3])
-#         #funcion q convierta argv[2] q es H1 y argv[3] q es "<e8,20> <e10,30>" a tupla
-#     except:
-#         print('paramento invalido')
-      
+#load_movil_element(('P1',(('e6',15),('e7',5)),2000)) 
+#python uber.py -load_movil_element P1 "<e8,10> <e10,40>" 2000
+
+
+if sys.argv[1] == "-load_movil_element":
+    try:
+        direccion=convertir_a_tupla(sys.argv[3])
+        ubimovil=(sys.argv[2],direccion,int(sys.argv[4]))
+        load_movil_element(ubimovil)
+    except:
+        print('No es posible cargar el elemento')
+
+
+#python uber.py -load_fix_element H1 "<e8,20> <e10,30>"
+if sys.argv[1] == "-load_fix_element":
+    try:
+        direccion=convertir_a_tupla(sys.argv[3])
+        lugar=(sys.argv[2],direccion)
+        load_fix_element(lugar)
+    except:
+        print('No es posible cargar el elemento')
+
+if sys.argv[1] == "-create_trip":
+
+    try:
+        if sys.argv[3][0].lower() in ["h", "a", "t", "s", "e", "k", "i"]:
+            create_trip(sys.argv[2],sys.argv[3])
+        else:
+            tupla=convertir_a_tupla(sys.argv[3])
+            create_trip(sys.argv[2],tupla)
+        #funcion q convierta argv[2] q es H1 y argv[3] q es "<e8,20> <e10,30>" a tupla
+    except:
+        print('paramento invalido')
