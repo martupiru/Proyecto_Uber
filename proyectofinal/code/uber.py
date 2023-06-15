@@ -118,9 +118,6 @@ def update_hash_auto(hash_auto,auto,new_direccion,new_monto):
     save_hash_table_Autos(hash_auto)
     lista_autos=load_lista_Autos()
 
-    print(len(lista_autos))
-    print(lista_autos)
-
     long=(len(lista_autos))
     for i in range (long):
         if lista_autos[i]==auto:
@@ -187,6 +184,8 @@ def create_trip(persona,elemento): #elemento= direccion o nombre direccion fija
 #CONSOLA
 
 
+
+
 def convertir_a_tupla(cadena):
     tuplas = re.findall(r'<(.*?),(.*?)>', cadena)
     tupla = tuple((terna[0], int(terna[1])) for terna in tuplas)
@@ -195,6 +194,14 @@ def convertir_a_tupla(cadena):
 #load_movil_element(('P1',(('e6',15),('e7',5)),2000)) 
 #python uber.py -load_movil_element P1 "<e8,10> <e10,40>" 2000
 
+
+#create_map('MAPITAPRUEBA.txt')
+#create_map(path)
+if sys.argv[1] == "-create_map":
+    try:
+        create_map(sys.argv[2])
+    except IndexError:
+        print("Paramentro invalido")
 
 if sys.argv[1] == "-load_movil_element":
     try:
