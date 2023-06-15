@@ -34,16 +34,14 @@ def hash_subcadena(k,m):
         sum = sum+ord(k[i])*(10**i)
     return(sum%m)
 
-def hash_terna(terna,m):
-    sum1=0
-    sum2=0
-    for i in range (0,len(terna[0])):
-        sum1=sum1 + ord(terna[0][i])*(10**i+1)
-    for i in range (0,len(terna[1])):
-        sum2=sum2 + ord(terna[1][i])*(10**i+1)
-    #
-    sum=sum1+sum2
-    return(sum%m)
+def hash_terna(terna, m):
+    hash_value = 0
+    for elemento in terna:
+        element_hash = 0
+        for caracteres in str(elemento):
+            element_hash = (element_hash * 31 + ord(caracteres)) % m
+        hash_value = (hash_value + element_hash) % m
+    return hash_value
 
 def search_hash_distancias(hash_distancias,esquinas):#esquinas= dupla de esquinas ej. (e1,e8)
    #calcular el hash a la dupla

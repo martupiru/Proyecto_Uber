@@ -1,41 +1,42 @@
 
 from uber import *
 
-'''
-serializar('MAPITAPRUEBA.txt')
-cargar_mapa_hashD()
-create_hash_table_Autos(53)
-create_hash_table_Personas(53)
-create_hash_table_Ubi_Fij(53)
+# create_map("MAPITAPRUEBA.txt")
+# serializar('MAPITAPRUEBA.txt')
+# cargar_mapa_hashD()
+# create_hash_table_Autos(53)
+# create_hash_table_Personas(53)
+# create_hash_table_Ubi_Fij(53)
+#printHashTable(load_hash_table_ubicaciones())
+# printHashTable(load_hash_table_distancias())
+
+# load_movil_element(('P1',(('e6',15),('e7',5)),2000)) 
+# load_movil_element(('P2',(('e13',25),('e1',25)),4000))  
+# load_movil_element(('P3',(('e4',10),('e5',5)),2000))
+# load_movil_element(('P4',(('e9',10),('e10',10)),2000)) 
+# load_movil_element(('P5',(('e2',5),('e3',5)),4000))  
 
 
-load_movil_element(('P1',(('e6',15),('e7',5)),2000)) 
-load_movil_element(('P2',(('e13',25),('e1',25)),4000))  
-load_movil_element(('P3',(('e4',10),('e5',5)),2000))
-load_movil_element(('P4',(('e9',10),('e10',10)),2000)) 
-load_movil_element(('P5',(('e2',5),('e3',5)),4000))  
-
-
-load_fix_element(('A1',(('e7',7),('e9',8)))) 
-load_fix_element(('T1',(('e12',10),('e11',5))))
-load_fix_element(('H1',(('e4',15),('e8',15))))
-load_fix_element(('S1',(('e1',10),('e2',5))))
+# load_fix_element(('A1',(('e7',7),('e9',8)))) 
+# load_fix_element(('T1',(('e12',10),('e11',5))))
+# load_fix_element(('H1',(('e4',15),('e8',15))))
+# load_fix_element(('S1',(('e1',10),('e2',5))))
 
 
 
-load_movil_element(('C1',(('e3',10),('e4',10)),200))
-load_movil_element(('C2',(('e6',5),('e5',5)),50)) 
-load_movil_element(('C3',(('e4',10),('e5',5)),50)) 
+# load_movil_element(('C1',(('e3',10),('e4',10)),200))
+# load_movil_element(('C2',(('e6',5),('e5',5)),50)) 
+# load_movil_element(('C3',(('e4',10),('e5',5)),50)) 
 
-load_movil_element(('C4',(('e14',10),('e13',10)),200))
-load_movil_element(('C5',(('e10',15),('e12',15)),50)) 
-load_movil_element(('C6',(('e8',5),('e9',5)),50)) 
+# load_movil_element(('C4',(('e14',10),('e13',10)),200))
+# load_movil_element(('C5',(('e10',15),('e12',15)),50)) 
+# load_movil_element(('C6',(('e8',5),('e9',5)),50)) 
 
-printHashTable(load_hash_table_Personas())
-printHashTable(load_hash_table_ubicaciones())
-printHashTable(load_hash_table_Autos())
-print(load_lista_Autos())
-'''
+# printHashTable(load_hash_table_Personas())
+
+# printHashTable(load_hash_table_Autos())
+# print(load_lista_Autos())
+#printHashTable(load_hash_table_ubicaciones())
 
 #create_trip('P3','S1')
 '''
@@ -63,7 +64,8 @@ load_fix_element(('T5',(('e2',10),('e6',40))))
 load_fix_element(('H4',(('e3',30),('e2',20)))) 
 load_fix_element(('S10',(('e6',25),('e7',20))))
 load_fix_element(('S20',(('e2',25),('e3',25))))
-#printHashTable(load_hash_table_ubicaciones())
+
+
 
 load_movil_element(('P1',(('e8',10),('e10',40)),2000)) 
 load_movil_element(('P2',(('e1',0),('e3',50)),4000))  
