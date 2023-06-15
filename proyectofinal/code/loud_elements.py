@@ -1,7 +1,6 @@
-from dictionary import *
-from graph import *
-import pickle
 
+import pickle
+from dictionary import *
 def load_map():
     # Carga la hash desde el archivo "Hash_Ubicaciones.pk"
     with open("Mapa.pk", "rb") as MapaFile:

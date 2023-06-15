@@ -1,6 +1,6 @@
-from dictionary import *
+
+import pickle
 from loud_elements import *
-from graph import *
 
 def verificar_sentido(direccion):
     cont=0
@@ -66,7 +66,8 @@ def search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,
     for i in range (len(list_autos)):
         auto = list_autos [i]
         #calculamos hash_key al auto
-        hash_key_auto = hash_subcadena(auto,len(hash_autos))
+
+        hash_key_auto = hash_subcadena(auto,(len(hash_autos)))
         #obtenemos los datos del auto mediante el search
         datos_Auto = search_hash_autos(hash_autos,auto,hash_key_auto) #devuelve una tupla con:(direccion,monto)
         direccion_auto = datos_Auto[0]
@@ -118,6 +119,7 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
         esquina_auto=tupla_auto[1]
         esquina_persona=tupla_persona[0]
         esquinas=(esquina_auto,esquina_persona)
+        #TENER EN CUENTA ENTODO
         distancia,camino=search_hash_distancias(hash_distancias,(esquina_auto,esquina_persona))
         distancia=distancia_total_recorrido(esquinas,hash_distancias,tupla_persona,tupla_auto,direccion_persona,direccion_auto)
         return distancia,camino
@@ -130,9 +132,12 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
         esquina_auto=tupla_sentido_auto[1][1]
         esquina_persona1=tupla_sentido_persona[1][0]
         esquina_persona2=tupla_sentido_persona[1][1]
+
+        #si las esquinas son las misma ya son el camino mas corto
         #verificar que que los recorridos no contengan al otro nodo
         distancia1,camino1=search_hash_distancias(hash_distancias,(esquina_auto,esquina_persona1))
         distancia2,camino2=search_hash_distancias(hash_distancias,(esquina_auto,esquina_persona2))
+
         if esquina_persona2 in camino1:
             #solo hacemos el recorrido con esquina 1
             esquinas1=(esquina_auto,esquina_persona2)
@@ -159,7 +164,7 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
         esquina_auto1=tupla_sentido_auto[1][0]
         esquina_auto2=tupla_sentido_auto[1][1]
         esquina_persona=tupla_sentido_persona[1][0]
-        
+       
         #verificar que que los recorridos no contengan al otro nodo
         distancia1,camino1=search_hash_distancias(hash_distancias,(esquina_auto1,esquina_persona))
         distancia2,camino2=search_hash_distancias(hash_distancias,(esquina_auto2,esquina_persona))
@@ -191,6 +196,7 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
         #dos posibles nodos para la persona
         esquina_persona1=tupla_sentido_persona[1][0]
         esquina_persona2=tupla_sentido_persona[1][1]
+
 
         distancia1,camino1=search_hash_distancias(hash_distancias,(esquina_auto1,esquina_persona1))
         distancia2,camino2=search_hash_distancias(hash_distancias,(esquina_auto2,esquina_persona1))
@@ -239,7 +245,7 @@ def casos_recorridos(tupla_sentido_persona,tupla_sentido_auto,direccion_persona,
         elif distancia4!=None and distacias_validas[0]==distancia4:
             return distancia4,camino4
 
-    #-----------funciona??----------------------------
+    #---------------------------------------
 
 def validar_entradas_create_trip(persona,elemento):
     #chequeamos que la entrada elemento sea una direccion o un nombre de direcciones

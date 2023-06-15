@@ -1,8 +1,6 @@
 import heapq
-from loud_elements import *
-from dictionary import *
-from trip import *
 import pickle
+from dictionary import *
 
 def cargar_grafo(vertices,aristas):
     graph = {node: [] for node in vertices}

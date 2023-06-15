@@ -1,11 +1,11 @@
 #PROYECTO LARICCHIA Y NAHMAN
-from dictionary import *
-from graph import *
-from loud_elements import *
-from trip import *
 import pickle
 import re
+import sys
+from graph import *
 
+
+from trip import *
 #---------------------------serializar fichero---------------------------------
 def serializar(path):
     #preguntar argumentos de la funcion con path
@@ -41,90 +41,144 @@ def cargar_mapa_hashD():
 def load_fix_element(lugar):
     HashUbi=load_hash_table_ubicaciones()
     # Realiza las modificaciones, cargar lugares 
-    with open("Mapa.pk", "rb") as MapaFile:
-        Maph=pickle.load(MapaFile)
+    Maph=load_map()
     exist = check_direccion(Maph,lugar[1])
     if exist == False:
         print("Esa direccion no existe")
     else:
         #si la direccion existe hacemos lo siguiente:
-        if lugar[0][0].lower() not in ["h", "a", "t", "s", "e", "k", "i"]:
-            print("El nombre ingresado no es válido")
-        else:
-            # Devuelve la hash modificada
-            new_name = search_exist_nombre(HashUbi,lugar[0])
-            if new_name != None:
-                cargar_new_element_hash(HashUbi,new_name,lugar)
-                save_hash_table_ubicaciones(HashUbi)
-#--------------------------------------------------------------------------------
+        if len(lugar[0]) > 1:
+            letra = lugar[0][0]
+            numeros = lugar[0][1:]
+           
+            if letra.isalpha() and numeros.isdigit():
+                if letra.lower() not in ["h", "a", "t", "s", "e", "k", "i"]:
+                    print("El nombre ingresado no es válido")
+        
+                else:
+                    # Devuelve la hash modificada
+                    new_name = search_exist_nombre(HashUbi,lugar[0])
+                    if new_name != None:
+                        cargar_new_element_hash(HashUbi,new_name,lugar)
+                        save_hash_table_ubicaciones(HashUbi)
+
+
+        #--------------------------------------------------------------------------------
 def load_movil_element(ubimovil): #ubomovil: <nombre, dirección, monto>
     #verificar que exista la direccion (grafo)
-    with open("Mapa.pk", "rb") as MapaFile:
-        Maph=pickle.load(MapaFile)
+    Maph=load_map()
     exist = check_direccion(Maph,ubimovil[1])
     if exist == False:
         print("Esa direccion no existe")
     else:
         #------autos------
-        if ubimovil[0][0] == "C" or ubimovil[0][0] == "c":
+        if ubimovil[0][0] == "C" :
+            
             H_Autos=load_hash_table_Autos()
             modify_hash_table_Autos(H_Autos,ubimovil)
             save_hash_table_Autos(H_Autos)
         #------personas------
-        elif ubimovil[0][0] == "P" or ubimovil[0][0] == "p":
+        elif ubimovil[0][0] == "P" :
+            
             H_Personas=load_hash_table_Personas()
             modify_hash_table_Personas(H_Personas,ubimovil)
             save_hash_table_Personas(H_Personas)
         else:
             print("El nombre ingresado no es válido")
 
+    # new_name = search_exist_nombre(HashUbi,lugar[0])
+    # if new_name != None:
+    #     cargar_new_element_hash(HashUbi,new_name,lugar)
+    #     save_hash_table_ubicaciones(HashUbi)
 #-----------------------------------------------------------------------------------
 
+def update_hash_personas(hash_personas,persona,new_direccion,new_monto):
+    hash_key_persona = hash_subcadena(persona,len(hash_personas))
+    delete(hash_personas,hash_key_persona)
+    save_hash_table_Personas(hash_personas)
+    #cargar
+    load_movil_element((persona,new_direccion,new_monto)) #ubomovil: <nombre, dirección, monto>
+
+def update_hash_auto(hash_auto,auto,new_direccion,new_monto):
+    hash_key_persona = hash_subcadena(auto,len(hash_auto))
+    delete(hash_auto,hash_key_persona)
+    save_hash_table_Autos(hash_auto)
+    lista_autos=load_lista_Autos()
+
+    print(len(lista_autos))
+    print(lista_autos)
+
+    long=(len(lista_autos))
+    for i in range (long):
+        if lista_autos[i]==auto:
+            lista_autos[i]=None
+    lista_autos = [elemento for elemento in lista_autos if elemento is not None]
+    save_list_autos(lista_autos)
+    load_movil_element((auto,new_direccion,new_monto))
+    
+
 def create_trip(persona,elemento): #elemento=direccion o nombre direccion fija
+    try:
+        direccion_persona=validar_entradas_create_trip(persona,elemento)[0]
+        direccion_destino=validar_entradas_create_trip(persona,elemento)[1]
 
-    direccion_persona=validar_entradas_create_trip(persona,elemento)[0]
-    direccion_destino=validar_entradas_create_trip(persona,elemento)[1]
+        hash_personas =load_hash_table_Personas()
+        monto_persona=search_monto_personas(hash_personas,persona)
 
-    hash_personas =load_hash_table_Personas()
-    monto_persona=search_monto_personas(hash_personas,persona)
+        if (direccion_destino !=None) and (direccion_persona!=None):
 
-    if (direccion_destino !=None) and (direccion_persona!=None):
+            hash_autos=load_hash_table_Autos()
+            list_autos=load_lista_Autos()
+            tupla_sentido_persona=verificar_sentido(direccion_persona)
+            ranking=search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,direccion_persona)
+            
+            if len(ranking)!=0:
+                print('Ranking autos: ',)
+                for node in ranking:
+                    print('Auto: ', node[0], '\ndistancia: ', node[1], '\ncosto de viaje: ', node[2], '\n----------')
+            
+                #CAMINO MAS CORTO PARA LLEGAR A DESTINO
+                tupla_sentido_destino=verificar_sentido(direccion_destino)
+                distancia_destino,camino_destino=casos_recorridos(tupla_sentido_destino,tupla_sentido_persona,direccion_destino,direccion_persona)
+                    #delvolver camino
+                print('La distancia a su destino es: ',distancia_destino)
+                print('El camino a su destino es: ',camino_destino)
+                realiza_viaje=input('Indique si va a relizar el viaje (Si/No)').lower()
+                if realiza_viaje=='si':
+                    entrada_valida=False
+                    while entrada_valida==False:
+                        auto_elegido= input('Elija un auto: ')
+                        for node in ranking:
+                            if auto_elegido==(node[0]):
+                                entrada_valida=True
+                                monto_total_viaje = node[2]
+                            # else:
+                            #     print('Ingrese el auto correctamente')
 
-        hash_autos=load_hash_table_Autos()
-        list_autos=load_lista_Autos()
-        tupla_sentido_persona=verificar_sentido(direccion_persona)
-        ranking=search_auto_lista(monto_persona,hash_autos,list_autos,tupla_sentido_persona,direccion_persona)
-        
-        if len(ranking)!=0:
-            print('Ranking autos: ',)
-            for node in ranking:
-                print('Auto: ', node[0], '\ndistancia: ', node[1], '\ncosto de viaje: ', node[2], '\n----------')
-        
-        #CAMINO MAS CORTO PARA LLEGAR A DESTINO
-            tupla_sentido_destino=verificar_sentido(direccion_destino)
-            distancia_destino,camino_destino=casos_recorridos(tupla_sentido_destino,tupla_sentido_persona,direccion_persona,direccion_destino)
-            #delvolver camino
-            print('La distancia a su destino es: ',distancia_destino)
-            print('El camino a su destino es: ',camino_destino)
-            realiza_viaje=input('Indique si va a relizar el viaje (Si/No)').lower()
-            if realiza_viaje=='si':
-                entrada_valida=False
-                while entrada_valida==False:
-                    auto_elegido= input('Elija un auto: ').lower()
-                    for node in ranking:
-                        if auto_elegido==node[0].lower():
-                            entrada_valida=True
-                            monto_total_viaje = node[2]
-                        else:
-                            print('Ingrese el auto correctamente')
-                #TELETRANSPORTAR 
-                #UPDATE_DIRECCION HASH PERSONA (persona,nueva_direccion,costo) 
-                new_monto_persona = monto_persona - monto_total_viaje
-                update_hash_personas(hash_personas,persona,direccion_destino,new_monto_persona)
-                #UPDATE_DIRECCION HASH AUTO ()
-                update_hash_autos(hash_autos,auto_elegido,direccion_destino)
-            elif realiza_viaje==('no'):
-                print('Viaje rechazado')
+                        #TELETRANSPORTAR 
+                        #UPDATE_DIRECCION HASH PERSONA (persona,nueva_direccion,costo) 
+                    new_monto_persona = monto_persona - monto_total_viaje
+                    update_hash_personas(hash_personas,persona,direccion_destino,new_monto_persona)
+                    #     #UPDATE_DIRECCION HASH AUTO ()
+                    monto_auto=search_monto_personas(hash_autos,auto_elegido)
+                    update_hash_auto(hash_autos,auto_elegido,direccion_destino,monto_auto)
+                elif realiza_viaje==('no'):
+                    print('Viaje rechazado')
+            else:
+                print('No hay autos para su viaje')
         else:
-            print('No hay autos para su viaje')
-    print('No es posible este viaje')
+            print('No es posible este viaje')
+    except:
+        print('No es posible realizar el viaje')
+
+#CONSOLA
+
+
+
+# if sys.argv[1] == "-create_trip":
+#     try:
+#         create_trip(sys.argv[2],sys.argv[3])
+#         #funcion q convierta argv[2] q es H1 y argv[3] q es "<e8,20> <e10,30>" a tupla
+#     except:
+#         print('paramento invalido')
+      

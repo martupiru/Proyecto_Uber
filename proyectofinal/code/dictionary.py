@@ -1,3 +1,5 @@
+
+
 def CreateHashTable(Dim):
     Hash=[]
     #crea un Hash de M posciones
@@ -21,13 +23,15 @@ def search(D,key):
         if elemento[0]==key:
             return (elemento[1])
         else: return None
+
+
                 
 #######FUNCIONES ESPECIALES UBER#############
 #Hash Key 
 def hash_subcadena(k,m):
-    k=k.lower()
+    sum=0
     for i in range (len(k)):
-        sum = ord(k[i])*(10**i)
+        sum = sum+ord(k[i])*(10**i)
     return(sum%m)
 
 def hash_terna(terna,m):
@@ -44,16 +48,23 @@ def hash_terna(terna,m):
 
 def search_hash_distancias(hash_distancias,esquinas):#esquinas= dupla de esquinas ej. (e1,e8)
    #calcular el hash a la dupla
-    hash_dupla=hash_terna(esquinas,len(hash_distancias))
-    index = hash_dupla
-    #elemento=[hash_key,((e1,e8,distancia),(lista_visitados))]
-    for elemento in hash_distancias[index]:
-        dupla = elemento[1]
-        if dupla[0][0]==esquinas[0]:
-            if dupla[0][1]==esquinas[1]:
-                distancia = dupla[0][2] #distancia del camino mas corto entre las dos esquinas
-                lista_visitados = dupla[1] #lista de nodos por los que hay que pasar para llegar del nodo inicio al nodo fin
-                return distancia, lista_visitados
+   if esquinas[0]==esquinas[1]:
+        distancia=0
+        lista_visitados=[esquinas[0]]
+        return distancia, lista_visitados
+   else:
+        hash_dupla=hash_terna(esquinas,len(hash_distancias))
+        index = hash_dupla
+        #elemento=[hash_key,((e1,e8,distancia),(lista_visitados))]
+        for elemento in hash_distancias[index]:
+            dupla = elemento[1]
+            if dupla[0][0]==esquinas[0]:
+                if dupla[0][1]==esquinas[1]:
+                    distancia = dupla[0][2] #distancia del camino mas corto entre las dos esquinas
+                    lista_visitados = dupla[1] #lista de nodos por los que hay que pasar para llegar del nodo inicio al nodo fin
+                    if esquinas[1] not in lista_visitados:
+                        lista_visitados.append(esquinas[1])
+                    return distancia, lista_visitados
 
 def cargar_new_element_hash(D,key,elemento):
     if D[key]==None:
@@ -65,13 +76,13 @@ def cargar_new_element_hash(D,key,elemento):
         tupla=(key,elemento)
         D[key].append(tupla)
 
-def search_exist_nombre(D,elemento): #elemento=(lugar,direccion)
-    hash_new_name=hash_subcadena(elemento,len(D))
-    if search(D,hash_new_name)!= None:
-        #Ya existe un elemento con ese nombre"
-        return None
-    else:
-        return hash_new_name
+def search_exist_nombre(D,nombre): #nombre= persona/auto
+    hash_new_name=hash_subcadena(nombre,len(D))
+    for elemento in D[hash_new_name]:
+        if elemento[1][0]==nombre:
+            #el elemento ya existe, retornamos none
+            hash_new_name = None
+    return hash_new_name 
         
 def search_direccion(D,nombre): #Conocer, dado un lugar, persona o auto la dirección del mismo
     hash_new_name=hash_subcadena(nombre,len(D))
@@ -97,7 +108,7 @@ def search_monto_personas(hash_personas,persona):
     hash_name=hash_subcadena(persona,len(hash_personas))
     for elemento in hash_personas[hash_name]:
         if elemento [1][0] == persona:
-            return(elemento[1][2])
+            return (elemento[1][2])
         
 #dado un auto, actualizamos su la direccion en la que se encuentra
 def update_hash_autos(hash_autos,auto,new_direccion):
@@ -107,13 +118,15 @@ def update_hash_autos(hash_autos,auto,new_direccion):
             #actualizamos la direccion
             elemento[1][1] = new_direccion
 
-def update_hash_personas(hash_personas,persona,new_direccion,new_monto):
-    hash_key_persona = hash_subcadena(persona,len(hash_personas))
-    for elemento in hash_personas[hash_key_persona]:
-        if elemento[1][0] == persona:
-            #actualizamos la direccion
-            elemento[1][1] = new_direccion
-            #actualizamos el monto
-            elemento[1][2] = new_monto
+
+
+def delete(D,key):
+    index=key
+    for i in range (len(D[index])):
+        if D[index][i][0]==key:
+                D[index].pop(i)
+                
+
+
 
 
